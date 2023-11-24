@@ -2,7 +2,7 @@ groups:
   - name: high_disk_usage
     rules:
       - alert: HighDiskUsage
-        expr: 100 - (node_filesystem_free_bytes / node_filesystem_size_bytes * 100) > 30
+        expr: 100 - (node_filesystem_free_bytes / node_filesystem_size_bytes * 100) > 0.1
         for: 0m
         labels:
           severity: warning

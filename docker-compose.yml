@@ -1,4 +1,9 @@
 version: "3"
+
+# volumes:
+#     prometheus_data: {}
+#     grafana_data: {}
+
 services:
     prometheus:
         image: prom/prometheus
@@ -13,12 +18,16 @@ services:
             - "9090:9090"
         networks:
             - mynetwork
+        depends_on:
+            - fastapi
+
     node-exporter:
         image: quay.io/prometheus/node-exporter
         container_name: node-exporter
         restart: always
         ports:
             - "9100:9100"
+
         networks:
             - mynetwork
     cadvisor:
@@ -42,6 +51,9 @@ services:
             - "3000:3000"
         volumes:
             - ./grafana:/var/lib/grafana
+        environment:
+            GF_SECURITY_ADMIN_USER: admin
+            GF_SECURITY_ADMIN_PASSWORD: P@ssw0rd
         networks:
             - mynetwork
     alertmanager:
@@ -50,7 +62,28 @@ services:
             - ./config/alertmanager.yml:/etc/alertmanager/alertmanager.yml
         ports:
             - "9093:9093"
+        # command:
+        #     - '--config.file=/etc/config.yml'
+        #     - '--storage.path= .'
         networks:
             - mynetwork
+
+    fastapi:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: fastapi
+        ports:
+            - '8000:8000'
+        
+        restart: always
+        networks:
+            - mynetwork
+        # deploy:
+        #     resources:
+        #         limits:
+        #             cpus: '0.30'
+        #             memory: 400M
+
 networks:
     mynetwork:

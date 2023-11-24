@@ -1,12 +1,14 @@
 # my global config
 global:
-  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  scrape_interval:  5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
 
 alerting:
- alertmanagers:
- - static_configs:
-   - targets: ['alertmanager:9093']
+  alertmanagers:
+    - scheme : http
+      static_configs:
+        - targets: ['alertmanager:9093']
+
 
 rule_files:
   # - "node_down.yml"
@@ -17,6 +19,7 @@ scrape_configs:
     static_configs:
     - targets: ['prometheus:9090']
 
+
   - job_name: 'cadvisor'
     static_configs:
     - targets: ['cadvisor:8080']
@@ -25,3 +28,7 @@ scrape_configs:
     scrape_interval: 8s
     static_configs:
       - targets: ['node-exporter:9100']
+
+  - job_name: 'fastapi'
+    static_configs:
+      - targets: ['fastapi:8000']

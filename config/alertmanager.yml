@@ -16,5 +16,5 @@ route:
 receivers:
 - name: 'default'
   email_configs:
-  - to: 'patrickwu8894@gmail.com'
+  - to: 'yenlingchng@gmail.com'
     send_resolved: true
